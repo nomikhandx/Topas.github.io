@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Topas - Expiry Date Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 40px;
+      text-align: center;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 450px;
+      margin: auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    input, select, button {
+      margin-top: 8px;
+      padding: 10px;
+      width: 100%;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .result {
+      margin-top: 30px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+    .print-btn {
+      margin-top: 10px;
+      background-color: #28a745;
+    }
+    .print-btn:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Topas - Expiry Date Calculator</h1>
+
+    <label for="mfgDate">Manufacturing Date:</label>
+    <input type="date" id="mfgDate" />
+
+    <label for="shelfLifeValue">Shelf Life:</label>
+    <input type="number" id="shelfLifeValue" placeholder="Enter shelf life (e.g., 6, 180)" />
+
+    <label for="unit">Unit:</label>
+    <select id="unit">
+      <option value="months">Months</option>
+      <option value="weeks">Weeks</option>
+      <option value="days">Days</option>
+    </select>
+
+    <button onclick="calculateExpiry()">Calculate Expiry Date</button>
+
+    <div class="result" id="result"></div>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Print This Page</button>
+  </div>
+
+  <script>
+    function calculateExpiry() {
+      const mfgDateInput = document.getElementById("mfgDate").value;
+      const shelfLife = parseInt(document.getElementById("shelfLifeValue").value);
+      const unit = document.getElementById("unit").value;
+      const resultDiv = document.getElementById("result");
+
+      if (!mfgDateInput || isNaN(shelfLife) || shelfLife <= 0) {
+        resultDiv.innerHTML = "❌ Please enter a valid manufacturing date and shelf life.";
+        return;
+      }
+
+      let expiryDate = new Date(mfgDateInput);
+
+      if (unit === "months") {
+        expiryDate.setMonth(expiryDate.getMonth() + shelfLife);
+      } else if (unit === "weeks") {
+        expiryDate.setDate(expiryDate.getDate() + (shelfLife * 7));
+      } else if (unit === "days") {
+        expiryDate.setDate(expiryDate.getDate() + shelfLife);
+      }
+
+      const formatted = expiryDate.toLocaleDateString('en-GB', {
+        day: '2-digit', month: '2-digit', year: 'numeric'
+      });
+
+      resultDiv.innerHTML = `✅ Expiry Date: <strong>${formatted}</strong>`;
+    }
+  </script>
+
+</body>
+</html>
